@@ -123,7 +123,7 @@ Commande pour connaitre la liste des navigateurs prefixés `npx browserslist`
 `npm install --save-dev mini-css-extract-plugin`
 
 -------------------
-## 5 et 6 plus besoin à partir de webpack 5
+### 5 et 6 plus besoin à partir de webpack 5
 
 Utilisé pour l'instant car impossible de choisir convenablement l'emplacement de sortie des fichiers [fonts|images|etc.]
 
@@ -137,9 +137,60 @@ Utilisé pour l'instant car impossible de choisir convenablement l'emplacement d
 
 ------------------
 
-7) `postcss postcss-sort-media-queries` fusion des media queries sur le fichier final
+7) `postcss postcss-sort-media-queries` fusion des mediaqueries dans le fichier final
 
-`npm install postcss postcss-sort-media-queries --save-dev`
+https://www.npmjs.com/package/postcss-sort-media-queries
+
+`npm install postcss-sort-media-queries --save-dev`
+
+- créer fichier `postcss.config.js` contenant le code suivant ou initialiser dans `webpack.config.js`
+
+  1) `postcss.config.js`
+  ``` JSON
+  module.exports = {
+    plugins: [
+      require('postcss-sort-media-queries')({
+        // sort: 'mobile-first' default value
+        sort: function(a, b) {
+        // custom sorting function
+       }
+      }),
+      require('autoprefixer')
+    ]
+  }
+  ```
+
+  2) `webpack.config.js`
+  ``` JSON
+  postcssOptions: {
+    plugins: [
+      PostcssSortMediaQueries({
+          sort: 'mobile-first' // default value
+          //sort: 'desktop-first'
+          // sort: function(a, b) {
+          //     // custom sorting function
+          // }
+      }),
+      autoprefixer()
+    ]
+  }
+  ```
+
+- `npm install terser-webpack-plugin -D`
+
+Après l'installation du plugin le fichier js ne sont plus minifiés en production.
+
+  ``` JSON
+  optimization: {
+      minimize: isDev() ? false : true,
+      minimizer: [
+        // minifier le js (plugin webpack par défaut)
+        new terserWebpackPlugin({
+            parallel: 4,
+        }),
+      ],
+  }
+  ```
 
 
 ## Compiler du scss

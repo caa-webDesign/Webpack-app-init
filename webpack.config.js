@@ -4,10 +4,21 @@ const dev = process.env.NODE_ENV === 'dev'
 
 // absolut path
 const path = require('path')
-// css
+/**
+ *  css ........
+*/ 
+//  prefixé
 const autoprefixer = require('autoprefixer')
-// css fichier séparé
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// fichier séparé
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+// media queries
+const PostcssSortMediaQueries = require('postcss-sort-media-queries')
+
+/**
+ *  JS
+ */
+// minifier
+const terserWebpackPlugin = require('terser-webpack-plugin')
 
 // JS Directory path.
 const JS_DIR = path.resolve( __dirname, 'src/js' );
@@ -141,6 +152,13 @@ module.exports = ( env, argv ) => {
                      options: {
                         postcssOptions: {
                            plugins: [
+                              PostcssSortMediaQueries({
+                                 sort: 'mobile-first' // default value
+                                 //sort: 'desktop-first'
+                                 // sort: function(a, b) {
+                                 //     // custom sorting function
+                                 // }
+                              }),
                               autoprefixer()
                            ]
 
@@ -187,6 +205,8 @@ module.exports = ( env, argv ) => {
                ],
                type: 'javascript/auto'
             },
+
+            // ASSETS DEFAULT WEBPACK 5 DO NOT USE BECAUSE IT IS IMPOSSIBLE TO EXPORT THE ASSETS IN DIFFERENT FOLDERS
             // {
             //    test: /\.(png|jpe?g|gif|svg)$/i,
             //    /**
@@ -222,15 +242,24 @@ module.exports = ( env, argv ) => {
 
 
       optimization: {
+
          minimize: isDev() ? false : true,
+
          minimizer: [
-           // CssMinimizerPlugin  https://webpack.js.org/plugins/css-minimizer-webpack-plugin/
-           // For webpack@5 you can use the `...` syntax to extend existing minimizers (i.e. `terser-webpack-plugin`), uncomment the next line
-            `...`,
-           //new CssMinimizerPlugin(),
+            // CssMinimizerPlugin  https://webpack.js.org/plugins/css-minimizer-webpack-plugin/
+            //      // For webpack@5 you can use the `...` syntax to extend existing minimizers (i.e. `terser-webpack-plugin`), uncomment the next line
+            //       `...`,
+
+            // new CssMinimizerPlugin({
+            //    parallel: true,
+            // }),
+
+            // minifier le js (plugin webpack par défaut)
+            new terserWebpackPlugin({
+               parallel: 4,
+            }),
          ],
-         
-       },
+      }
       
    }
    
