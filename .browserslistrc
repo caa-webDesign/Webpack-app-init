@@ -1,0 +1,10 @@
+[production]
+IE 10
+> .5% or last 2 versions
+
+[dev]
+last 1 chrome version
+last 1 firefox version
+
+[ssr]
+node 12

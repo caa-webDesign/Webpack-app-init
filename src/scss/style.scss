@@ -1,0 +1,53 @@
+@charset "UTF-8";
+/*!
+ * Theme Name: CARLOS ANTUNES
+ * Theme URI: http://carlosantunes.ch
+ * Version: 1.0
+ * @description Mon site web
+ * @author Carlos Antunes @carlos
+ * @site https://carlosantunes.ch
+ */
+
+
+
+// tools
+@import 'tools/reset';
+
+@import 'costum/fonts';
+
+$color : yellow;
+
+
+html, body{
+    font-family: 'Roboto', sans-serif;
+}
+
+body{
+
+    background-image: url(../images/bg.png);
+
+    h1{
+        color: $color;
+    
+        transform: rotate(2deg);
+
+        transform: translateY(10px);
+
+        display: flex;
+    }
+}
+
+
+@media only screen and (max-width: 600px) {
+    body {
+      background-color: lightblue;
+
+    }
+}
+
+
+@media only screen and (max-width: 600px) {
+    h1 {
+      color: red;
+    }
+}
