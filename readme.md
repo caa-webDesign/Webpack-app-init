@@ -1,6 +1,7 @@
 # Configurer Webpack pour démarer un projet web
 
 ## Conditions préalables
+
 1) nodejs installé sur le système. 
 2) nodejs est préinstallé avec npm
   - verifier environement à l'aide de la commande `npm --v`
@@ -13,6 +14,7 @@
 
 
 ## Puis mettre à jour `package.json` avec les détails suivants
+
 -------------------
 ```json
 {
@@ -34,6 +36,7 @@
 
 
 ## Instalation webpack et babel et quelques autres chargeurs et plugins en tant que dépendances de développement
+
 -----------------
 
 ### webpack - modules bundler [groupeur de modules]
@@ -51,7 +54,7 @@ Babel est ce que l'on appel un *transcompilateur*. Il à pour but principal de c
 
 #### Configuration de babel pour ajouter les polifyls dynamiquement  https://babeljs.io/docs/en/babel-preset-env
 
-`npm install core-js@3 --save`
+`npm install -D core-js@3 --save`
 
 - modifier `webpack.config.js` ou `.babelrc` et ajouter :
 
@@ -122,6 +125,8 @@ Commande pour connaitre la liste des navigateurs prefixés `npx browserslist`
 -------------------
 ## 5 et 6 plus besoin à partir de webpack 5
 
+Utilisé pour l'instant car impossible de choisir convenablement l'emplacement de sortie des fichiers [fonts|images|etc.]
+
 5) Le `file-loader` résout les `import/ require()` va déplacer le fichier dans le dossier output et créer le bon chemin pour y accéder.
 
 `npm install -D file-loader`
@@ -132,6 +137,10 @@ Commande pour connaitre la liste des navigateurs prefixés `npx browserslist`
 
 ------------------
 
+7) `postcss postcss-sort-media-queries` fusion des media queries sur le fichier final
+
+`npm install postcss postcss-sort-media-queries --save-dev`
+
 
 ## Compiler du scss
 
@@ -141,13 +150,12 @@ Apès l'instalation du `css-loader` et du `style-loader` on peux ajouter un load
 
 `npm install -D sass-loader sass node-sass`
 
-
 -------------
 
 ## Hérachie du projet dossiers/fichiers
 
-Dossier d'entrée **src**
-Dossier de sortie **build**
+Dossier d'entrée *input* **src**
+Dossier de sortie *Output* **build**
 
 ```
 project
@@ -162,18 +170,35 @@ project
 │    └── fonts
 │    └── images
 │    └── js
-│    │  ├── main.js
-│    │  └── components
-│    │   └── mycomponents.js
 │    └── scss
-│    │ └── style.scss
-│    └── costom
-│      └── _mycomponents.scss
 │
 └── build  => dossier de sortie (fichiers compilers)
-    └──js
-    │  └──script.js
-    └──css
-      └── style.css
+```
+## input
+```
+└── src => dossier source
+    ├── index.js    => Point d'entrée des appels de fichiers (imports [main.js | style.scss])
+    └── fonts
+    └── images
+    └── js
+     │  ├── main.js
+     │  └── components
+     │          └── mycomponents.js
+     └── scss
+     │    └── style.scss
+     └── costom
+            └── _mycomponents.scss
+```
+## Output
+```
+└── build  => dossier de sortie (fichiers compilers)
+    └── js
+    │    └── script.js
+    └── css
+    │    └── style.css
+    └── fonts
+    │   └── [name].[ext]
+    └── images
+        └── [name].[ext]
 ```
 
