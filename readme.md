@@ -176,9 +176,14 @@ https://www.npmjs.com/package/postcss-sort-media-queries
   }
   ```
 
-- `npm install terser-webpack-plugin -D`
+8) `css-minimizer-webpack-plugin` minifier et optimiser le css
 
-Après l'installation du plugin le fichier js ne sont plus minifiés en production.
+`npm install css-minimizer-webpack-plugin --save-dev`
+
+
+9) Resoudre le problème après l'installation du/des plugin les fichiers js ne sont plus minifiés en production.
+
+`npm install terser-webpack-plugin -D`
 
   ``` JSON
   optimization: {

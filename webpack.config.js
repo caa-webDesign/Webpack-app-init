@@ -5,18 +5,20 @@ const dev = process.env.NODE_ENV === 'dev'
 // absolut path
 const path = require('path')
 /**
- *  css ........
+*  css ........
 */ 
-//  prefixé
+//  prefixe du css
 const autoprefixer = require('autoprefixer')
-// fichier séparé
+// fichier css séparé du dom
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-// media queries
+// minification du css
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+// Fusion des mediaqueries dans le fichier final
 const PostcssSortMediaQueries = require('postcss-sort-media-queries')
 
 /**
- *  JS
- */
+*  JS
+*/
 // minifier
 const terserWebpackPlugin = require('terser-webpack-plugin')
 
@@ -26,24 +28,21 @@ const IMG_DIR = path.resolve( __dirname, 'src/imgages' );
 const BUILD_DIR = path.resolve( __dirname, 'build' );
 
 
-
-
+/**
+* JS Input entries
+*/
 let entry = {
 
    // Point d'entrée JS
    script: "./src/index",
-   // polyfill pour IE11 qui résoud les fonction asyn await et fetch
-   // fetch_polyfill : JS_DIR + '/fetchPolyfill',
 
    //main: JS_DIR + '/main.js',
    //single: JS_DIR + '/single.js',
 }
 
-if( !dev){
-   entry.fetch_polyfill = JS_DIR + '/fetchPolyfill'
-}
-
-
+/**
+* JS Output
+*/
 const output = {
    path: BUILD_DIR,
    filename: 'js/[name].js',
@@ -51,6 +50,36 @@ const output = {
    // assetModuleFilename: '../images/[name][ext]'
 }
 
+
+
+// Options css dev | production
+let cssOptions = [
+   autoprefixer()
+]
+
+/**
+ *  IF ENV === production
+ */
+if( !dev ){
+
+   // polyfill pour IE11 qui résoud les fonction asyn await et fetch
+   entry.fetch_polyfill = JS_DIR + '/fetchPolyfill'
+
+   // Options css dev | production
+   cssOptions.push(
+
+      /**
+       *  Fusion des mediaqueries dans le fichier final
+      */
+      require('postcss-sort-media-queries')({
+         sort: 'mobile-first' // default value
+         //sort: 'desktop-first'
+         // sort: function(a, b) {
+         //     // custom sorting function
+         // }
+      }),
+   )
+}
 
 
 
@@ -139,7 +168,7 @@ module.exports = ( env, argv ) => {
                use: [
 
                   {
-                     // On crée le css  dans un fichier séparé
+                     // css  dans un fichier séparé
                      loader:  MiniCssExtractPlugin.loader,
                      options: {
                         // This is required for asset imports in CSS, such as url()
@@ -151,17 +180,8 @@ module.exports = ( env, argv ) => {
                      loader : "postcss-loader",
                      options: {
                         postcssOptions: {
-                           plugins: [
-                              PostcssSortMediaQueries({
-                                 sort: 'mobile-first' // default value
-                                 //sort: 'desktop-first'
-                                 // sort: function(a, b) {
-                                 //     // custom sorting function
-                                 // }
-                              }),
-                              autoprefixer()
-                           ]
 
+                           plugins: cssOptions
                         }
                      }
                   },
@@ -247,17 +267,18 @@ module.exports = ( env, argv ) => {
 
          minimizer: [
             // CssMinimizerPlugin  https://webpack.js.org/plugins/css-minimizer-webpack-plugin/
-            //      // For webpack@5 you can use the `...` syntax to extend existing minimizers (i.e. `terser-webpack-plugin`), uncomment the next line
-            //       `...`,
+            // For webpack@5 you can use the `...` syntax to extend existing minimizers (i.e. `terser-webpack-plugin`), uncomment the next line
+            `...`,
 
-            // new CssMinimizerPlugin({
-            //    parallel: true,
-            // }),
+            new CssMinimizerPlugin({
+               parallel: 4,
+               // sourceMap: true,
+            }),
 
             // minifier le js (plugin webpack par défaut)
-            new terserWebpackPlugin({
-               parallel: 4,
-            }),
+            // new terserWebpackPlugin({
+            //    parallel: 4,
+            // }),
          ],
       }
       
