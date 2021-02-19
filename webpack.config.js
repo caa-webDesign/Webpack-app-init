@@ -1,6 +1,9 @@
 // recupération des variable d'environement depuis package.jeson
-const dev = process.env.NODE_ENV === 'dev'
-// console.log('dev : ' + dev)
+const ENV = process.env.NODE_ENV
+// console.log('NODE_ENV : ' + ENV)
+
+// const serv = process.env.NODE_ENV === 'serv'
+// console.log('NODE_ENV serv : ' + serv)
 
 // absolut path
 const path = require('path')
@@ -46,7 +49,7 @@ let entry = {
 const output = {
    path: BUILD_DIR,
    filename: 'js/[name].js',
-   // publicPath: '/assets/'
+   publicPath: "/build", // server
    // assetModuleFilename: '../images/[name][ext]'
 }
 
@@ -60,7 +63,7 @@ let cssOptions = [
 /**
  *  IF ENV === production
  */
-if( !dev ){
+if( ENV === "dev" ){
 
    // polyfill pour IE11 qui résoud les fonction asyn await et fetch
    entry.fetch_polyfill = JS_DIR + '/fetchPolyfill'
@@ -112,10 +115,38 @@ module.exports = ( env, argv ) => {
       /** 
       * Un SourceMap complet est émis sous forme de fichier séparé (par exemple main.js.map) 
       * Il ajoute un commentaire de référence au bundle pour que les outils de développement sachent où le trouver. 
+      * 
+      * https://webpack.js.org/configuration/devtool/
+      * 
       * définissez ceci sur false si vous n'en avez pas besoin 
       */
       devtool: isDev() ? 'source-map' : false, 
-      // devtool : false,
+      //devtool: 'inline-source-map',
+
+
+      /**
+      * SERVER WEBPACK
+      */
+      // resolution Hot reload 
+      target: ENV === "serv" ? "web" : false,
+      devServer: {
+         
+         // Path des fichiers de distribution exemple './public'
+         //contentBase: path.join(__dirname, '/'),
+         compress: true,
+         port: 8080,
+         
+         // reload auto
+         // enable HMR
+         //hot: true,
+      },
+
+      // serveur webpack
+      mode: isDev() ? 'development': 'production',
+
+      /**
+       * end server
+       */
 
 
       plugins: [
@@ -164,7 +195,7 @@ module.exports = ( env, argv ) => {
 
             // css | scss rules
             {
-               test: /\.(sa|sc|c)ss$/,
+               test: /\.(s[ac]|c)ss$/i,
                use: [
 
                   {
@@ -266,10 +297,11 @@ module.exports = ( env, argv ) => {
          minimize: isDev() ? false : true,
 
          minimizer: [
-            // CssMinimizerPlugin  https://webpack.js.org/plugins/css-minimizer-webpack-plugin/
+
             // For webpack@5 you can use the `...` syntax to extend existing minimizers (i.e. `terser-webpack-plugin`), uncomment the next line
             `...`,
 
+            // CssMinimizerPlugin  https://webpack.js.org/plugins/css-minimizer-webpack-plugin/
             new CssMinimizerPlugin({
                parallel: 4,
                // sourceMap: true,

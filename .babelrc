@@ -1,27 +1,27 @@
 {
   "presets": [
     [
-       "@babel/preset-env",
-       {
-          // Ajouter les polifyls dynamiquement  https://babeljs.io/docs/en/babel-preset-env
-          "useBuiltIns" : "usage",
-          "corejs": { "version": "3.8", "proposals": true }
+      "@babel/preset-env",
+      {
+        // Ajouter les polifyls dynamiquement  https://babeljs.io/docs/en/babel-preset-env
+        "useBuiltIns" : "usage",
+        "corejs": { "version": "3.8", "proposals": true }
 
-          // targets/browsers => déplacée dans .browserslistrc
-          /* "targets": {
-            //"browsers": ["chrome 74, last 1 chrome version, last 1 firefox version"]
-            "browsers": [{
-              "android": "4.2",
-              "chrome": "41",
-              "edge": "17",
-              "firefox": "52",
-              "ie": "11",
-              "ios": "9.3",
-              "opera": "56",
-              "safari": "10.1"
-            }] 
-          } */
-        }
+        // targets/browsers => déplacée dans .browserslistrc
+        /* "targets": {
+          //"browsers": ["chrome 74, last 1 chrome version, last 1 firefox version"]
+          "browsers": [{
+            "android": "4.2",
+            "chrome": "41",
+            "edge": "17",
+            "firefox": "52",
+            "ie": "11",
+            "ios": "9.3",
+            "opera": "56",
+            "safari": "10.1"
+          }] 
+        } */
+      }
     ]
- ]
+  ]
 }
