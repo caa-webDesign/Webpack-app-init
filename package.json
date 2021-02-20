@@ -5,8 +5,8 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "prod": "webpack --mode=production --progress",
-    "dev": "NODE_ENV=dev webpack --mode=development --watch",
+    "prod":   "NODE_ENV=prod webpack --mode=production --progress",
+    "dev":    "NODE_ENV=dev webpack --mode=development --watch",
     "server": "NODE_ENV=serv webpack serve --mode=development --hot",
     "clean": "rm -rf build/*"
   },

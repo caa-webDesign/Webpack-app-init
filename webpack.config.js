@@ -1,6 +1,6 @@
 // recupération des variable d'environement depuis package.jeson
 const ENV = process.env.NODE_ENV
-// console.log('NODE_ENV : ' + ENV)
+console.log('NODE_ENV : ' + ENV)
 
 // const serv = process.env.NODE_ENV === 'serv'
 // console.log('NODE_ENV serv : ' + serv)
@@ -57,13 +57,13 @@ const output = {
 
 // Options css dev | production
 let cssOptions = [
-   autoprefixer()
+   autoprefixer(),
 ]
 
 /**
  *  IF ENV === production
  */
-if( ENV === "dev" ){
+if( ENV === "prod" ){
 
    // polyfill pour IE11 qui résoud les fonction asyn await et fetch
    entry.fetch_polyfill = JS_DIR + '/fetchPolyfill'
