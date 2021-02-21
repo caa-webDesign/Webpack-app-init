@@ -26,9 +26,9 @@ const PostcssSortMediaQueries = require('postcss-sort-media-queries')
 const terserWebpackPlugin = require('terser-webpack-plugin')
 
 // JS Directory path.
-const JS_DIR = path.resolve( __dirname, 'src/js' );
-const IMG_DIR = path.resolve( __dirname, 'src/imgages' );
-const BUILD_DIR = path.resolve( __dirname, 'build' );
+const JS_DIR = path.resolve( __dirname, 'src/js' )
+const IMG_DIR = path.resolve( __dirname, 'src/imgages' )
+const BUILD_DIR = path.resolve( __dirname, 'build' )
 
 
 /**
@@ -49,7 +49,21 @@ let entry = {
 const output = {
    path: BUILD_DIR,
    filename: 'js/[name].js',
-   publicPath: "/build", // server
+   
+   /**
+    * {live server} Fichier de sortie
+    * 
+    * commande npm run server
+    * 
+    *    http://localhost:8080/build/
+    */
+   publicPath: "/build"
+
+   /**
+    * A utiliser avec webpack 5 :(
+    *    Malheureusement on ne peux pas dessider les dossiers de sortie 
+    *    Tester plus tard à nouveau
+    */
    // assetModuleFilename: '../images/[name][ext]'
 }
 
@@ -139,6 +153,16 @@ module.exports = ( env, argv ) => {
          // reload auto
          // enable HMR
          //hot: true,
+
+         overlay: true,
+         compress: true,
+
+         // CORS
+         headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+            "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+         }
       },
 
       // serveur webpack

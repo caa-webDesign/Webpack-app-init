@@ -345,10 +345,49 @@ devServer: {
     //contentBase: path.join(__dirname, '/'),
     compress: true,
     port: 8080,
+
+    overlay: true,
+
+    /*
+    * CORS
+    * Résoud le problème dev app php : Cross-Origin Request Headers
+    */ 
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+    }
 },
 // serveur webpack
 mode: 'development',
 ```
+
+### Utiliser le hot relload server
+
+#### Depuis application HTML
+1) Liens à exposé dans le fichier `index.html` 
+    ```
+    <link rel="stylesheet" href="build/css/style.css">
+
+    <script src="build/js/script.js"></script>
+    ```
+2) `npm run server`
+3) ouvrir le lien http://localhost:8080/
+
+#### Depuis application PHP
+Pour pouvoir profiter du ***Hot Module Replacement*** *(HMR)* il faut lancer deux serveurs "php + npm".
+1) Liens à exposé dans le fichier `index.php` 
+    ```
+    <link rel="stylesheet" href="http://localhost:8080/build/css/style.css">
+
+    <script src="http://localhost:8080/build/js/script.js"></script>
+    ```
+2) Ouvrir le terminal :
+    - cd [nom du dossier]
+    - `php -S localhost:8000`
+3) `npm run server`
+4) ouvrir le lien http://localhost:8000/
+
 
 -------------
 
@@ -385,9 +424,9 @@ project
      │  └── components
      │          └── mycomponents.js
      └── scss
-     │    └── style.scss
-     └── costom
-            └── _mycomponents.scss
+         └── style.scss
+                └── costom
+                      └── _mycomponents.scss
 ```
 ## Output
 ```
