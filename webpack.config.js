@@ -15,9 +15,11 @@ const autoprefixer = require('autoprefixer')
 // fichier css séparé du dom
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 // minification du css
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 // Fusion des mediaqueries dans le fichier final
 const PostcssSortMediaQueries = require('postcss-sort-media-queries')
+// Optimisation des images
+const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin')
 
 /**
 *  JS
@@ -74,6 +76,13 @@ let cssOptions = [
    autoprefixer(),
 ]
 
+let pluginsOptions = [
+   // css dans fichier séparé
+   new MiniCssExtractPlugin({
+      filename : 'css/style.css',
+   }),
+]
+
 /**
  *  IF ENV === production
  */
@@ -88,13 +97,42 @@ if( ENV === "prod" ){
       /**
        *  Fusion des mediaqueries dans le fichier final
       */
-      require('postcss-sort-media-queries')({
+      PostcssSortMediaQueries({
          sort: 'mobile-first' // default value
          //sort: 'desktop-first'
          // sort: function(a, b) {
          //     // custom sorting function
          // }
       }),
+   )
+   
+   /**
+    * Optimization des images
+    */
+   pluginsOptions.push(
+      // optimisation des images
+      new ImageMinimizerPlugin({
+
+         minimizerOptions: {
+            // Lossless optimization with custom option
+            // Feel free to experiment with options for better result for you
+            plugins: [
+               ['gifsicle', { interlaced: true }],
+               ['jpegtran', { progressive: true }],
+               ['optipng', { optimizationLevel: 5 }],
+               [
+                  'svgo',
+                  {
+                     plugins: [
+                        {
+                           removeViewBox: false,
+                        },
+                     ],
+                  },
+               ],
+            ],
+         },
+      })
    )
 }
 
@@ -173,15 +211,42 @@ module.exports = ( env, argv ) => {
        */
 
 
+      plugins : pluginsOptions,
+      /*
       plugins: [
 
-         // css dans fichier séparé
+        // css dans fichier séparé
          new MiniCssExtractPlugin({
             filename : 'css/style.css',
          }),
 
 
-      ],
+         // optimisation des images
+         new ImageMinimizerPlugin({
+            minimizerOptions: {
+               // Lossless optimization with custom option
+               // Feel free to experiment with options for better result for you
+               plugins: [
+                  ['gifsicle', { interlaced: true }],
+                  ['jpegtran', { progressive: true }],
+                  ['optipng', { optimizationLevel: 5 }],
+                  [
+                     'svgo',
+                     {
+                        plugins: [
+                           {
+                              removeViewBox: false,
+                           },
+                        ],
+                     },
+                  ],
+               ],
+            },
+         }),
+
+
+      ], // end plugins
+      */
       
       module: {
          rules: [
@@ -248,7 +313,7 @@ module.exports = ( env, argv ) => {
 
             // file loader
             {
-               test: /\.(png|svg|jpe?g|gif)$/,
+               test: /\.(png|svg|jpe?g|gif)$/i,
                exclude: /fonts/,
                dependency: { not: ['url'] },
                use: [
@@ -265,7 +330,7 @@ module.exports = ( env, argv ) => {
             },
             
             {
-               test: /\.(svg|eot|woff|woff2|ttf)$/,
+               test: /\.(eot|woff|woff2|ttf)$/,
                exclude: /images/,
                dependency: { not: ['url'] },
                use: [
@@ -280,7 +345,6 @@ module.exports = ( env, argv ) => {
                ],
                type: 'javascript/auto'
             },
-
             // ASSETS DEFAULT WEBPACK 5 DO NOT USE BECAUSE IT IS IMPOSSIBLE TO EXPORT THE ASSETS IN DIFFERENT FOLDERS
             // {
             //    test: /\.(png|jpe?g|gif|svg)$/i,

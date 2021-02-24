@@ -79,7 +79,7 @@ Site qui explique super bien le fontionnement de Babel : https://blogs.infinites
 
 La gestion des navigateurs retrocompatibles se fait dans le fichier `webpack.config.js` ou dans le fichier séparé `.browserslistrc` selon l'exemple de configuration ci dessous :
 
-- Fichier `.browserlistrc`
+- Fichier `.browserlistrc` https://github.com/browserslist/browserslist
 ```
 [production]
   IE 10
@@ -387,6 +387,31 @@ Pour pouvoir profiter du ***Hot Module Replacement*** *(HMR)* il faut lancer deu
     - `php -S localhost:8000`
 3) `npm run server`
 4) ouvrir le lien http://localhost:8000/
+
+
+## Optimiser les images *(ImageMinimizerWebpackPlugin)*
+
+- Pour commencer, installer le plugin `image-minimizer-webpack-plugin` depuis : https://webpack.js.org/plugins/image-minimizer-webpack-plugin/
+
+`npm install image-minimizer-webpack-plugin --save-dev`
+
+Les images peuvent être optimisées selon deux modes:
+
+1. Lossless (sans perte de qualité).
+2. Lossy (avec perte de qualité).
+
+Note:
+
+imagemin-mozjpeg peut être configuré en mode sans perte et avec perte.
+
+***Plugins imagemin recommandés pour une optimisation sans perte***
+
+`npm install imagemin-gifsicle imagemin-jpegtran imagemin-optipng imagemin-svgo --save-dev`
+
+
+webpack.config.js
+
+
 
 
 -------------

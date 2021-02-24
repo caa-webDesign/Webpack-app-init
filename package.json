@@ -5,8 +5,8 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "prod":   "NODE_ENV=prod webpack --mode=production --progress",
-    "dev":    "NODE_ENV=dev webpack --mode=development --watch",
+    "prod": "NODE_ENV=prod webpack --mode=production --progress",
+    "dev": "NODE_ENV=dev webpack --mode=development --watch",
     "server": "NODE_ENV=serv webpack serve --mode=development --hot",
     "clean": "rm -rf build/*"
   },
@@ -25,6 +25,11 @@
     "css-loader": "^5.0.2",
     "css-minimizer-webpack-plugin": "^1.2.0",
     "file-loader": "^6.2.0",
+    "image-minimizer-webpack-plugin": "^2.2.0",
+    "imagemin-gifsicle": "^7.0.0",
+    "imagemin-jpegtran": "^7.0.0",
+    "imagemin-optipng": "^8.0.0",
+    "imagemin-svgo": "^8.0.0",
     "mini-css-extract-plugin": "^1.3.7",
     "node-sass": "^5.0.0",
     "postcss": "^8.2.6",
